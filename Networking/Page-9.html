@@ -11,7 +11,14 @@
     <script
       class="u-script"
       type="text/javascript"
-      src="jquery.js"
+      src="script.js"
+      defer=""
+    ></script>
+
+    <script
+      class="u-script"
+      type="text/javascript"
+      src="http://code.jquery.com/jquery-1.11.2.min.js"
       defer=""
     ></script>
     <script
@@ -20,6 +27,7 @@
       src="nicepage.js"
       defer=""
     ></script>
+
     <meta name="generator" content="Nicepage 4.18.7, nicepage.com" />
     <link
       id="u-theme-google-font"
@@ -31,7 +39,8 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
     />
-
+    <script src="https://firebase.google.com/docs/web/setup#available-libraries" />
+    <script src="/__/firebase/7.14.2/firebase-database.js"></script>
     <script type="application/ld+json">
       {
         "@context": "http://schema.org",
@@ -154,6 +163,16 @@
         width: 100%;
       }
     }
+    .alert {
+      width: 100%;
+      background: #eafaf1;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 900;
+      display: none;
+    }
   </style>
 
   <body
@@ -230,7 +249,11 @@
       <div
         class="u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-table u-table-responsive u-table-1"
       >
-        <table class="u-table-entity" id="myTable">
+        <table
+          class="u-table-entity"
+          style="overflow-y: scroll; height: 457px; display: block"
+          id="myTable"
+        >
           <colgroup>
             <col width="11.7%" />
             <col width="19.9%" />
@@ -367,6 +390,34 @@
                 >
               </td>
             </tr>
+            <tr style="height: 82px">
+              <td
+                class="u-border-1 u-border-grey-50 u-custom-color-1 u-table-cell u-table-cell-17"
+              >
+                2022.10.07
+              </td>
+              <td
+                class="u-border-1 u-border-grey-50 u-custom-color-1 u-table-cell u-table-cell-18"
+              >
+                Lorenzo
+              </td>
+              <td
+                class="u-border-1 u-border-grey-50 u-custom-color-1 u-table-cell u-table-cell-19"
+              >
+                AI in 5G: The Case of Online Distributed Transfer Learning over
+                Edge Networks
+              </td>
+              <td
+                class="u-border-1 u-border-grey-50 u-custom-color-1 u-table-cell u-table-cell-20"
+              >
+                <a
+                  class="u-active-none u-border-none u-btn u-button-link u-button-style u-hover-none u-none u-text-palette-1-base u-btn-5"
+                  href="https://ieeexplore.ieee.org/Xplore/cookiedetectresponse.jsp/"
+                  target="_blank"
+                  >Paper</a
+                >
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -375,9 +426,11 @@
       <form
         name="signupForm"
         action=""
+        id="signupForm"
         onsubmit="return myFunction(event)"
         style="background-color: #e0e5eb"
       >
+        <div class="alert">Sucessfully submitted</div>
         <div class="container">
           <h1>Sign Up</h1>
           <p>Please fill in this form to Sign up for next paper.</p>
@@ -434,84 +487,87 @@
           /><br /><br />
         </div>
         <button type="submit" id="btn1">Sign Up</button>
+        <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
       </form>
     </div>
   </body>
-  <script>
-    function checkValidity() {
-      console.log("asdjsajk");
-      let inputs = document.getElementsByClassName("required");
-      let btn = document.querySelector('button[type="submit"]');
-      let isValid = true;
-      for (var i = 0; i < inputs.length; i++) {
-        let changedInput = inputs[i];
-        if (changedInput.value.trim() === "" || changedInput.value === null) {
-          isValid = false;
-          break;
-        }
-      }
-      return isValid;
-    }
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "AIzaSyCtRfv3tek_X1RRHgMhYD5a8cZSkyWqLJg",
+      authDomain: "networkingwebsite-74abf.firebaseapp.com",
+      databaseURL:
+        "https://networkingwebsite-74abf-default-rtdb.firebaseio.com",
+      projectId: "networkingwebsite-74abf",
+      storageBucket: "networkingwebsite-74abf.appspot.com",
+      messagingSenderId: "817828365672",
+      appId: "1:817828365672:web:bb0fbd08c5236a910242dd",
+      measurementId: "G-8NT66E3D3X",
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    console.log("9999 11");
+    var signUPform = firebase.database().ref("signupForm");
+    var el = document.getElementById("signupForm");
+    if (el) {
+      el.addEventListener("submit", function (e) {
+        e.preventDefault();
+        console.log("9999 12");
 
-    const email = document.querySelector("#email");
-    const icon1 = document.querySelector(".icon1");
-    const icon2 = document.querySelector(".icon2");
-    const error = document.querySelector(".error-text");
-    let regExp = /^[^ ]+@["slu"]+\.["com"]/;
+        var name = document.getElementById("fname").value;
+        var fpaper = document.getElementById("fpaper").value;
+        var lpaper = document.getElementById("lpaper").value;
+        var dateId = document.getElementById("dateId").value;
 
-    function check() {
-      console.log("Checkkkkkk");
+        console.log("9999 ", name, fpaper, lpaper, dateId);
+        var signUpForm = signUPform.push();
+        signUpForm.set({
+          name: name,
+          fpaper: fpaper,
+          lpaper: lpaper,
+          dateId: dateId,
+        });
+        document.querySelector(".alert").style.display = "block";
 
-      if (email.value.match(regExp)) {
-        email.style.background = "#eafaf1";
-        icon1.style.display = "none";
-        icon2.style.display = "block";
-        error.style.display = "none";
-      } else {
-        email.style.background = "#fceae9";
-        icon1.style.display = "block";
-        icon2.style.display = "none";
-        error.style.display = "block";
-      }
-      if (email.value == "") {
+        setTimeout(() => {
+          document.querySelector(".alert").style.display = "none";
+        }, 3000);
+
+        document.getElementById("signupForm").reset();
+        var email = document.querySelector("#email");
         email.style.borderColor = "lightgrey";
         email.style.background = "#f1f1f1";
         icon1.style.display = "none";
         icon2.style.display = "none";
         error.style.display = "none";
-      }
+      });
     }
 
-    function myFunction(e) {
-      console.log("I've been called 2");
-      e.preventDefault();
-      var valid = checkValidity();
-      if (!valid) {
-        alert("Form is invalid");
-        return;
-      }
-      var fname = document.getElementById("fname").value;
-      var fpaper = document.getElementById("fpaper").value;
-      var lpaper = document.getElementById("lpaper").value;
-      var dateId = document.getElementById("dateId").value;
+    function GetAllData() {
 
-      var currentdate = new Date();
-      var datetime =
-        currentdate.getFullYear() +
-        "." +
-        (currentdate.getMonth() + 1) +
-        "." +
-        currentdate.getDate();
+      firebase
+        .database()
+        .ref("signupForm")
+        .once("value", function (AllRecords) {
 
+          AllRecords.forEach(function (CurrentRecord) {
+            var name = CurrentRecord.val().name;
+            var fpaper = CurrentRecord.val().fpaper;
+            var lpaper = CurrentRecord.val().lpaper;
+            var dateId = CurrentRecord.val().dateId;
+            AdditemsToTable(name, fpaper, lpaper, dateId);
+          });
+        });
+    }
+    function AdditemsToTable(name, fpaper, lpaper, dateId) {
       var table = document.getElementById("myTable");
 
+      console.log("999999999999", name, fpaper, lpaper, dateId);
       var newRow =
         '<tr style="height: 82px;">' +
         '<td class="u-border-1 u-border-grey-50 u-custom-color-1 u-table-cell u-table-cell-17">' +
         dateId +
         "</td>" +
         '<td class="u-border-1 u-border-grey-50 u-custom-color-1 u-table-cell u-table-cell-18">' +
-        fname +
+        name +
         "</td>" +
         '<td class="u-border-1 u-border-grey-50 u-custom-color-1 u-table-cell u-table-cell-19">' +
         fpaper +
@@ -522,10 +578,8 @@
         '" target="_blank">Paper</a>' +
         " </td>" +
         "</tr>";
-
-      document.getElementById("tbodyId").innerHTML += newRow;
-
-     
+      table.tBodies[0].insertAdjacentHTML("afterbegin", newRow);
     }
+    window.onload = GetAllData;
   </script>
 </html>
