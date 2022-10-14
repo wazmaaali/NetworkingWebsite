@@ -595,3 +595,7 @@ button:hover {
   font-weight: 900;
   display: none;
 }
+.responsive {
+  width: 80%;
+  height: auto;
+}
